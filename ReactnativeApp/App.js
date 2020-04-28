@@ -1,90 +1,24 @@
 import React from 'react';
 import {StyleSheet, Text, View, setState, FlatList } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
+const Stack = createStackNavigator();
 
-export default class App extends React.Component{
-  
-  constructor(props){
-    super(props);  
-    this.state = {
-      loading: false,
-      superheroe: [],
-      url: 'http://192.168.0.7:8000/heroes/?format=json'
-    }
-  }
+import Login from './screens/Login';
+import Main from './screens/Conexion';
+import Models from './screens/Models';
+import Registro from './screens/Registro';
 
-  componentDidMount(){
-    this.getHeroe();
-  }
-
-  getHeroe = () => {
-
-    this.setState({loading:true})
-    
-    fetch(this.state.url)
-    .then(res => res.json())
-    .then(res=>{
-      this.setState({
-        superheroe: res,
-        loading: false
-      });
-    });
-  };
-//   async function getHero(){
-//     const url =  "http://192.168.0.7:8000/heroes/?format=json";
-//     try{
-//     const response = await fetch(url)
-//     const data = await response.json()
-//     console.log(data[0].name)
-//     const firstelement = data[0]
-//     console.log('El primer elemento es: ', firstelement)
-//     }catch(error){
-//         console.log(error.message)
-//     }
-// }
-
-// getHero();
-
-//////////////////////////////////////////////
-// const [isLoading, setLoading] = useState(true);
-//   const [data, setData] = useState([]);
-
-//   useEffect(() => {
-//     fetch('http://192.168.0.7:8000/heroes/?format=json')
-//       .then((response) => response.json())
-//       .then((json) => setData(json.array))
-//       .catch((error) => console.error(error))
-//       .finally(() => setLoading(false));
-//   });
-
-render(){
-  if(this.state.loading){
+export default function App() {
   return (
-    <View style={styles.container}>
-        <Text>Descargando Super Heroe</Text>
-   </View>
+    <NavigationContainer>
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Conexion" component={Conexion} />
+        <Stack.Screen name="Models" component={Models} />
+        <Stack.Screen name="Registro" component={Registro} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-  }
-    return (
-      <View style={{flex:1, paddingTop:60,paddingLeft:55}}>
-        <Text>Los datos obtenidos del servidor son:</Text>
-         <FlatList style={{paddingTop:25}}
-          data = {this.state.superheroe}
-          renderItem={
-          ({item}) => <Text>{item.name}</Text>
-            }
-            keyExtractor={(item, index)=> index.toString()}
-         />
-    </View>
-    );
- }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
